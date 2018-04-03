@@ -1,0 +1,46 @@
+site_name:            'Fathomable.io'
+theme:
+  name: material
+  feature:
+    tabs: true
+markdown_extensions:
+    - pymdownx.tasklist
+    - pymdownx.striphtml:
+        strip_comments: true
+    - admonition
+    - codehilite(guess_lang=false)
+    - toc(permalink=true)
+extra_css:
+    - css/custom.css
+extra:
+  palette:
+    primary:          'blue grey'
+    accent:           'amber'
+  logo:               'images/ttlogo.jpg'
+site_favicon:         'images/favicon.ico'
+site_author:          'Taylored Technology'
+site_description:     'Autonomic Containerization for Agnostic Pipelines'
+copyright:            'Taylored Technology 2016-Current'
+pages:
+  - 'Essentials': 'index.md'
+  - 'Getting Started': 'getting-started.md'
+  - 'Architecture':
+    - 'Overview': 'architecture/index.md'
+    - 'Application Dependencies': 'architecture/application-dependencies.md'
+    - 'Authentication': 'architecture/authentication.md'
+    - 'Container Structure': 'architecture/container-structure.md'
+    - 'Master -> Worker': 'architecture/master-worker.md'
+    - 'OneFlow Influence': 'architecture/flow.md'
+  - 'REST APIs':
+    - 'Overview': 'rest-apis/index.md'
+    - 'Flow': 'rest-apis/flow.md'
+    - 'Ingest': 'rest-apis/ingest.md'
+    - 'Keys': 'rest-apis/keys.md'
+    - 'Namespace': 'rest-apis/namespace.md'
+    - 'Release': 'rest-apis/release.md'
+    - 'Tracker': 'rest-apis/tracker.md'
+  - 'YAML Definitions':
+    - 'Deployment Patterns': 'yaml-definitions/index.md'
+    - 'Apps': 'yaml-definitions/apps.md'
+    - 'Cluster': 'yaml-definitions/cluster.md'
+    - 'Namespaces': 'yaml-definitions/namespaces.md'

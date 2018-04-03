@@ -1,0 +1,5 @@
+Pygments>=2.2.0
+mkdocs-material>=1.8.1
+mkdocs>=0.16.3
+pymdown-extensions>=3.5
+python-markdown-comments>=0.0.0
