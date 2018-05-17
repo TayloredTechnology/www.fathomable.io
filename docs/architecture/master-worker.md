@@ -1,6 +1,7 @@
 # Master Worker
 
-!!! summary distributed synchronized control of replicated company technology stacks
+!!! summary
+		distributed synchronized control of replicated company technology stacks
 
 ## Reasoning
 

@@ -1,6 +1,7 @@
 # Getting Started with Fathomable.io
 
-!!! summary zero to hero, in the shortest time possible
+!!! summary
+		zero to hero, in the shortest time possible
 
 At first glance, _Fathomable.io_ is simple to get up and running.
 
@@ -79,7 +80,8 @@ From a cluster state perspective, nothing noticible will happen at this point as
 
 … would typically setup cluster level applications, along with the definition of what _namespace templates_ are available for _Fathomable.io_ to use. As part of this process, application tracking can also be baked in.
 
-!!! note The database itself is always considered current and the ultimate source of truth. As such all setup files are **only** referenced by _Fathomable.io_ prior to the initial database creation.
+!!! note
+		The database itself is always considered current and the ultimate source of truth. As such all setup files are **only** referenced by _Fathomable.io_ prior to the initial database creation.
 
 The simplest method of doing this is to add another container layer to the existing backend container with the required application tracking information.
 

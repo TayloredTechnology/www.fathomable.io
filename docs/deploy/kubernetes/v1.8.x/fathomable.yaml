@@ -35,7 +35,7 @@ subjects:
     namespace: kube-system
 ---
 kind: Deployment
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1beta2
 metadata:
   name: fathomable
   namespace: kube-system
@@ -46,6 +46,9 @@ spec:
     type: Recreate
   minReadySeconds: 10
   revisionHistoryLimit: 0
+  selector:
+    matchLabels:
+      fathomable: fathomable
   template:
     metadata:
       labels:

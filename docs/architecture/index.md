@@ -1,6 +1,7 @@
 # Overview
 
-!!! summary Understanding how **Fathomable.io**'s architecture holds together and the benefit to complex (or simple) enterprise systems.
+!!! summary
+		Understanding how **Fathomable.io**'s architecture holds together and the benefit to complex (or simple) enterprise systems.
 
 ## Resoning
 

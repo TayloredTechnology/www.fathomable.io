@@ -1,6 +1,7 @@
 # Flow
 
-!!! summary Evolution of Git Flow / Trunk while providing a technical platform for alternative Git Deployment approaches
+!!! summary
+		Evolution of Git Flow / Trunk while providing a technical platform for alternative Git Deployment approaches
 
 ## Reasoning
 

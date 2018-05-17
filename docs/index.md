@@ -1,6 +1,7 @@
 # Fathomable.io
 
-!!! summary > Autonomic Containerization for Agnostic Pipelines
+!!! summary
+		> Autonomic Containerization for Agnostic Pipelines
 
     … Self orchestration for applications on any underlying containerization infrastructure.
 

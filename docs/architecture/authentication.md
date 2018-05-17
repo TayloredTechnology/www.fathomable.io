@@ -1,6 +1,7 @@
 # Authentication
 
-!!! summary accessing the REST API securely
+!!! summary
+		accessing the REST API securely
 
 ## Reasoning
 

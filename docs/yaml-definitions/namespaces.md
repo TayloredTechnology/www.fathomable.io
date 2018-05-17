@@ -1,6 +1,8 @@
 # API @ Namespaces
 
-!!! info - **Scope:** _Fathomable.io_ - **File:** `Fathomable.io.namespaces.yaml`
+!!! info
+		- **Scope:** _Fathomable.io_
+		- **File:** `Fathomable.io.namespaces.yaml`
 
 ## Concept
 
@@ -12,7 +14,9 @@ _Fathomable.io_ isn't restrictive if you desire multiple versions of a namespace
 
 The concept of flow is applied to namespaces, where each namespace should be capable of identifying all errors relevant to it, and promotion to another namespace should only happen with successful execution.
 
-Flow is: !!! info ** dev (non-ha) -> ha -> perf -> prod {canary & stable} **
+Flow is:
+!!! info
+		** dev (non-ha) -> ha -> perf -> prod {canary & stable} **
 
 Or in more detail:
 
@@ -36,13 +40,15 @@ prod:
 (others)
 ```
 
-!!! note '~' character is used throughout this documentation where items are mandatory. You can also checkout the Fathomable.io.minimal.namespaces.yaml for the absolute minimum settings necessary
+!!! note
+		'~' character is used throughout this documentation where items are mandatory. You can also checkout the Fathomable.io.minimal.namespaces.yaml for the absolute minimum settings necessary
 
 `dev`, `ha`, `perf`, `prod` are sample names following the 'flow' approach mentioned previously. You are free to use your own names for meta environments. Just add `type: ['HADEV', 'PRODLIKE']` to the namespace with the settings you want to use. If you use the default names then environments will automatically perform according to 'flow' design
 
 For simplicity only the `dev` environment is listed in examples,
 
-!!! info "Flow Information" _dev_
+!!! info
+		"Flow Information" _dev_
 
      - (non-ha)
      - (minimum resource allocation)
@@ -108,7 +114,8 @@ Array values can be passed into each of the above to trigger multiple executions
 
 Ranges can also be specified using strings i.e. dayOfWeek = [0, '5-6'] will result in running the job on Sunday, Friday, Saturday
 
-!!! note It's worth noting that the default value of a component of a recurrence rule is null (except for second, which is 0 for familiarity with cron). If we did not explicitly set minute to 0 above, the message would have instead been logged at 5:00pm, 5:01pm, 5:02pm, …, 5:59pm. Probably not what you want.
+!!! note
+		It's worth noting that the default value of a component of a recurrence rule is null (except for second, which is 0 for familiarity with cron). If we did not explicitly set minute to 0 above, the message would have instead been logged at 5:00pm, 5:01pm, 5:02pm, …, 5:59pm. Probably not what you want.
 
 ### environmental
 
@@ -122,7 +129,8 @@ dev:
 
 Environment naming approaches don't have to follow the outline suggested here, as Environment types are controlled via variables in this part of the API. Everything under this API tag is converted to environmental variables in the deployment.
 
-!!! note App environmental varibles take precedence over namespace ones. i.e. _App_ level variables will overwrite _Namespace_ environmental variables
+!!! note
+		App environmental varibles take precedence over namespace ones. i.e. _App_ level variables will overwrite _Namespace_ environmental variables
 
 ### Ingress
 
@@ -170,7 +178,8 @@ List of _Groups_ and _Apps_ within groups that will be blacklisted from deployin
 2.  \*.stubbed = the 'stubbed' App in any Group
 3.  stub.stubbed = only the 'stubbed' App in the Group 'stub'
 
-!!! important Priority follows this order: **Group > WildCard > Named App**
+!!! important
+		Priority follows this order: **Group > WildCard > Named App**
 
 ### resources
 

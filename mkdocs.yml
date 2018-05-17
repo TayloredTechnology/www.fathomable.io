@@ -8,8 +8,10 @@ markdown_extensions:
     - pymdownx.striphtml:
         strip_comments: true
     - admonition
-    - codehilite(guess_lang=false)
-    - toc(permalink=true)
+    - codehilite:
+        guess_lang: false
+    - toc:
+        permalink: true
 extra_css:
     - css/custom.css
 extra:

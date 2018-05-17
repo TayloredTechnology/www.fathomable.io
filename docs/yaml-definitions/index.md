@@ -1,6 +1,7 @@
 # Deployment Patterns
 
-!!! summary Architectured for use in Enterprise & Startup organisations **Fathomable.io** is typically used in one of the following deployment patterns
+!!! summary
+		Architectured for use in Enterprise & Startup organisations **Fathomable.io** is typically used in one of the following deployment patterns
 
 In addition to these deployment patterns any of **Fathomable.io**'s Plugins can be hot added to the deployment or baked into the container.
 
@@ -18,7 +19,8 @@ This is the most common deployment pattern, as GitHub application repositories h
 
 ## Embedded YAML's Fathomable.io
 
-!!! note While its possible to fork the open source repository, add the YAML's and build a new container, this approach is only recommended where custom backends or propriatory (in-house) plugins are necessary. For the vast majority of users the extra overhead of keeping a fork current with **Fathomable.io**'s development is an unnecessary overhead
+!!! note
+		While its possible to fork the open source repository, add the YAML's and build a new container, this approach is only recommended where custom backends or propriatory (in-house) plugins are necessary. For the vast majority of users the extra overhead of keeping a fork current with **Fathomable.io**'s development is an unnecessary overhead
 
 This pattern is utilised when a database hasn't been initiated and bulk import of applications is required.
 

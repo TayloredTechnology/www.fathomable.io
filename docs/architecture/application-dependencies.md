@@ -1,6 +1,7 @@
 # Application Dependencies
 
-!!! summary understanding integrations between microservices; services; applications and whole company deploys
+!!! summary
+		understanding integrations between microservices; services; applications and whole company deploys
 
 ## Reasoning
 

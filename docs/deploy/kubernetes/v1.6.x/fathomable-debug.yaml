@@ -61,7 +61,8 @@ spec:
             name: mandatory-fathomable-database
       containers:
         - name: fathomable
-          image: gcr.io/taylored-technology/fathomable:latest
+          image: gcr.io/taylored-technology/fathomable:debug
+          command: ["sleep", "200000"]
           volumeMounts:
             - name: fathomable-config
               mountPath: /opt/deploy
@@ -90,16 +91,10 @@ spec:
               value: 'true'
             - name: AUTHENTICATOR
               value: 'amqk ef5z fvrn gp6q p7dg pq6g pncu ww7l'
-          livenessProbe:
-            failureThreshold: 3
-            httpGet:
-              path: /health/alive
-              port: 3000
-              scheme: HTTP
-            initialDelaySeconds: 30
-            periodSeconds: 60
-            successThreshold: 1
-            timeoutSeconds: 1
+            - name: DISABLE_ExTERNAL_VALIDATION
+              value: 'true'
+            - name: DEBUG
+              value: '*,-follow-redirects'
           readinessProbe:
             failureThreshold: 3
             httpGet:
@@ -110,6 +105,30 @@ spec:
             periodSeconds: 30
             successThreshold: 1
             timeoutSeconds: 1
+---
+kind: Deployment
+apiVersion: extensions/v1beta1
+metadata:
+  name: fathomable-httpie
+  namespace: kube-system
+  labels:
+    fathomable: httpie
+spec:
+  strategy:
+    type: Recreate
+  minReadySeconds: 1
+  revisionHistoryLimit: 0
+  template:
+    metadata:
+      labels:
+        fathomable: httpie
+    spec:
+      terminationGracePeriodSeconds: 5
+      serviceAccount: fathomable
+      containers:
+        - name: httpie
+          image: clue/httpie
+          command: ["sleep", "200000"]
 ---
 apiVersion: v1
 kind: ConfigMap
