@@ -3,9 +3,11 @@
 !!! info
 		- **Scope:** _App Specific_
 		- **File:** `fathomable.yaml`
+		- **Location:** _Application Repository_ / _CI/CD Pushed_
 
-## Concept
+## Requirements
 
+- **Fathomable**
 … minimal, but extensible with complexity and application understanding description for deployment and management on any infrastructure.
 
 The only restrictions _Fathomable.io_ places on application descripiton and deployment is the concept that every applicaton must be tied to a group. This is modeled on the 'owner/application' model that Docker registries also follow.
@@ -59,6 +61,7 @@ exampleGroup:
 ```
 exampleGroup:
   group:
+		authRepository: {}
 		config: {}
 		secrets: {}
     containerOwner: ''
@@ -76,6 +79,19 @@ While flexible, naming of groups is important as the resulting auto-generated ap
 As **Fathomable.io** doesn't mandate how to run your infrastructure design (just greatly simplifies it), `group` wide settings can live in several places:
 
 The normal approach most users tend to take is to initially put group settings into each app as relevant, and then as the group becomes defined merge the 'global' settings into _Fathomable.io.groups.yaml_
+
+### authRepository
+
+```
+exampleGroup:
+	group:
+		authRepository:
+			'exampleGroup':
+				- name: ''
+				- value: ''
+```
+
+An array of Docker permission files for repository access.
 
 ### config
 
@@ -99,6 +115,7 @@ exampleGroup:
 	group:
 		secrets:
 			'secretname':
+				type: 'opaque'
 				mountPath: '/secret-location'
 				data:
 					- name: secretInfo
@@ -196,20 +213,63 @@ Following the Kubernetes serviceAccount principles, if a custom serviceAccount i
 ```
 exampleGroup
   exampleApp:
+		config: {}
+		secrets: {}
     depends: {}
     environment: {}
     ha: {}
     imageTag: 'latest'
     ingress: {}
     labels: {}
-~   language: ''
     probes: {}
     resources: {}
-    terminationGracePeriodSeconds: '30'
+    stateful: {}
+		daemon: true
+		args: []
+		terminationGracePeriodSeconds: '30'
     vetos: {}
 ```
 
-Only mandatory value is `language`
+### config
+
+```
+exampleGroup:
+	exampleApp:
+		config:
+			'configname':
+				mountPath: '/somewhere'
+				data:
+					- name: configDetail
+						value: 'string of information'
+			'anotherconfig':
+				inheritGroup: true
+```
+
+Each item in `config` is a representation of a _ConfigMap_ with individual items specified in the array object under `data`. Each item represents an individual file. `mountPath` is the directory location in the container that the _ConfigMap_ should be mounted to.
+
+If `inheritGroup` is provided the configuration will be loaded from the group settings enabling a more 'global' oriented view of configuration
+
+### secrets
+
+```
+exampleGroup:
+	exampleApp:
+		secrets:
+			'secretname':
+				type: 'opaque'
+				mountPath: '/secret-location'
+				data:
+					- name: secretInfo
+						value: (base64 string)
+			'anothersecret':
+				inheritGroup: true
+```
+
+Each item in `secrets` is a map with individual items under `data` representing files to be mounted into the `mountPath` location in the container.
+
+
+If `inheritGroup` is provided the secret will be loaded from the group settings enabling a more 'global' oriented view of configuration
+
 
 ### environment
 
@@ -286,39 +346,41 @@ If a fixed label i.e. 'latest' is used instead then _Fathomable.io_ will scan fo
 exampleGroup:
   exampleApp:
     ingress:
-      additionalHosts:
-        - hostname: anotheredux.co
-        - hostname: 'another.co'
+      additionalDomains:
+        - name: anotheredux.co
+        - name: 'another.co'
           paths:
             - path: '/additional'
-              servicePort: another
+              port: another
+						- path: '/another'
+							port: 8765
       additionalPorts:
-        - 8765
-        - management
-      servicePorts:
         - name: another
           port: 8765
-          ingress: true
+          expose: true
           paths:
-            - path: '/override'
+            - '/override'
         - name: redux
           port: 9990
+      exposeDevelopment: true
+      exposeProduction: true
+      paths:
+				- '/override'
       vetos:
         defaultPort: 5678
-        disableIngress: true
         disableFromURLGroup: true
         disableFromURLNamespace: true
         disableOutputGroup: true
         disableOutputNamespace: true
         disableService: true
         domainName: somewhere.co
-        exposeProduction: 'true'
+				exposeService: true
         fqdn: awesome-app.dev.else.co
         ignoreTLS: true
-        paths:
-          - path: /override
-            servicePort: another
+				name: 'myapp'
 ```
+
+Its important to understand that as **Fathomable** configurations are Application centric, ingress is with respect to the Application's requirements.
 
 Getting traffic in and out of your cluster in a sensible and controlled way is challenging. We follow the approach of _Kubernetes_ in creating ingress points (Egress to come) using the cluster auto-mapping capabilities (if available) to create the actual DNS & Load Balancers with your cloud provider.
 
@@ -330,16 +392,16 @@ If `servicePorts` contains `ingress: true` then this additional port will also b
 
 Walking through the options:
 
-* `servicePorts`: every port listed here will map to the created service. The actual name of the service is autogenerated from the application deployment name and _must_ be modified according to the rules there to change.
+* `additionalPorts`: every port listed here will map to the created service. The actual name of the service is autogenerated from the application deployment name and _must_ be modified according to the rules there to change.
 * `paths`: everywhere `paths` is mentioned an array of additional paths to add to the ingress are listed. This is a full override of the default '/' path option so if you need this enabled with additional paths it will need to be added
-* `additionalHosts`: very simple logic mapping, for each additionalHost what are the paths and ports that should be exposed. _Fathomable.io_ makes no assumptions about an additionalHost as its a common use-case to restrict routes on secondary domains.
+* `additionalDomains`: very simple logic mapping, for each additionalHost what are the paths and ports that should be exposed. _Fathomable.io_ makes no assumptions about an additionalHost as its a common use-case to restrict routes on secondary domains.
 * `disableFromURLGroup`: removes `groupName` from the generated output URL
 * `disableFromURLNamespace`: removes `namespaceName` from the generated output URL
-* `disableIngress`: will turn off _ingress_ capabilities for this application
 * `disableService`: will turn off _ingress_ and _service_ capabilities for this application. Not all applications need to be exposed to other applications in the cluster and this toggle is to permit that use-case
 * `domainName`: override of automatically generated hostname. The full DNS including FQDN for the cluster must be specified
 * `defaultPort`: by default its `80` this provides an override capability. Note the name of the servicePort `default` doesn't change, just the port number it maps to.
 * `ignoreTLS`: when TLS is enabled in the namespace, with termination specified as _cluster_ an additional TLS field is created to allow cluster based TLS termination. HTTP traffic is disabled by default when TLS is enabled. This allows HTTP traffic to also reach the cluster.
+* `name`: overrides the service name to assist with existing hard wired DNS apps
 
 !!! note
 		_Kubernetes_ currently has a restriction where only HTTP & HTTPS ports can be used for _ingress_ externally. The API will be upgraded when this limitation is removed.
@@ -368,15 +430,6 @@ Hotfix isn't a label as we strongly suggest following SemVer for deployments, an
 
 You are free to add as many custom labels as you need.
 
-### language
-
-```
-exampleGroup:
-  exampleApp:
-~   language: java
-```
-
-The primary mandatory field in the configuration file, it sets any additional best-practice requirements when not using all available settings in _fathomable.yaml_
 
 ### probes
 
@@ -430,6 +483,33 @@ If neither `min` or `max` are specified then the namespace defaults will be used
 * **burstable**: _default_ `min` values are allocated to the pod as minimum required to run. No upper limits are placed on resources.
 * **bestEffort**: can be used when the application is lowest priority of them all. `min`, `max` and `namespace default` values are totally ignored. (Currently un-implemented due to lack of user demand)
 
+### stateful
+
+```
+exampleGroup:
+	exampleApp
+		stateful:
+			databaseName: ''
+			individualServices: true	# default = false
+			noCompact: true						# default = false
+			replicas: 3
+			sharedStorage: true				# default = false
+			volumes:
+				'avolume':
+					mountPath: '/avolume'
+					size: '10Gi'
+					storageClass: ''
+```
+
+* `databaseName`: standard application naming will be applied if this field is omitted. Its frequently used in custom templates for configuring some of the expected internals
+* `individualServices`: some applications can operate under a common service endpoint, others such as MongoDB require fixed service endpoints for each database
+* `replicas`: number of PODS that should be deployed, if the backend supports it anti-affinity rules will already be in place per Availablility Zone and Host.
+* `noCompact`: in envionments that aren't 'HA' or 'PRODLIKE' **Fathomable** will auto-compact to save resources, typically this isn't a problem, however in Stateful dependent applications depending on their requirements they may be configured for n+1 guaranteed minimum levels. As such setting this flag to false will ensure `replicas` number is respected for all environment types. Additionally applications that tollerate `canCompact` will be created in parallel while those that cannot will execute sequentially
+* `sharedStorage`: determines if the PODS should have mount the same storage or have unique storage per pod
+* `storageClass`: the type of storage strategy that should be applied
+
+In providing a consistent minimal configuration the `stateful` configuration integrates with `ingress` and it should be used for accessing accordingly
+
 ### terminationGracePeriodSeconds
 
 ```
@@ -455,6 +535,7 @@ exampleGroup
       enableProfiler: true
       isolateMetadata: true
       name: example-app
+			officialImage: 'redis'
       omitFromDeploy: true
       omitFromNamespaces:
         - prodRedux
@@ -470,6 +551,7 @@ exampleGroup
     - `containerRepository`
     - `containerOwner`
     - `containerName`
+		- `officialImage`
 
     Its recommended to override as little as possible as long-term container image management is easiest when using this auto-generated best practice.
 

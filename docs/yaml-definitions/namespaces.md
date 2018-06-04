@@ -37,6 +37,7 @@ dev:
 ha:
 perf:
 prod:
+mandatory:
 (others)
 ```
 
@@ -44,6 +45,8 @@ prod:
 		'~' character is used throughout this documentation where items are mandatory. You can also checkout the Fathomable.io.minimal.namespaces.yaml for the absolute minimum settings necessary
 
 `dev`, `ha`, `perf`, `prod` are sample names following the 'flow' approach mentioned previously. You are free to use your own names for meta environments. Just add `type: ['HADEV', 'PRODLIKE']` to the namespace with the settings you want to use. If you use the default names then environments will automatically perform according to 'flow' design
+
+`mandatory` is a reserved namespace: All information populated in this key will be deployed into all namespaces. Application description is the same as Fathomable's app config
 
 For simplicity only the `dev` environment is listed in examples,
 

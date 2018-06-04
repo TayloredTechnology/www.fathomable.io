@@ -120,4 +120,4 @@ metadata:
   name: mandatory-fathomable-database
   namespace: kube-system
 data:
-  db.json: ''
+  db.json: '{}'
