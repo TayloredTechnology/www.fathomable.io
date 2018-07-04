@@ -28,7 +28,7 @@ metadata:
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: admin
+  name: cluster-admin
 subjects:
   - kind: ServiceAccount
     name: fathomable
@@ -64,7 +64,7 @@ spec:
             name: mandatory-fathomable-database
       containers:
         - name: fathomable
-          image: gcr.io/taylored-technology/fathomable:latest
+          image: gcr.io/taylored-technology/fathomable:kubernetes
           volumeMounts:
             - name: fathomable-config
               mountPath: /opt/deploy
@@ -121,3 +121,36 @@ metadata:
   namespace: kube-system
 data:
   db.json: '{}'
+---
+apiVersion: apps/v1beta2
+kind: DaemonSet
+metadata:
+  name: fathomable-prepull
+  namespace: kube-system
+spec:
+  selector:
+    matchLabels:
+      name: fathomable-prepull
+  template:
+    metadata:
+      labels:
+        name: fathomable-prepull
+    updateStrategy:
+      type: RollingUpdate
+      rollingUpdate:
+        maxUnavailable: 10
+    spec:
+      initContainers:
+      - name: prepull
+        image: docker
+        command: ["docker", "pull", "gcr.io/taylored-technology/fathomable:kubernetes"]
+        volumeMounts:
+        - name: docker
+          mountPath: /var/run
+      volumes:
+      - name: docker
+        hostPath:
+          path: /var/run
+      containers:
+      - name: pause
+        image: gcr.io/google_containers/pause

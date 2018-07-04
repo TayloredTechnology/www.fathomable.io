@@ -7,38 +7,6 @@ At first glance, _Fathomable.io_ is simple to get up and running.
 
 Ensuring that ongoing management; development; and releasing of inter-dependent multi-business unit applications across multiple environments stays as simple as possible.
 
-## Essential Component Understanding
-
-### Backend Container
-
-… the powerhouse or central brain of the entire operation. Containers are available from [Google Container Registry](https://gcr.io/taylored-technology/fathomable).
-
-A suitable backend container is all that's necessary to run _Fathomable.io_ in a selected backend.
-
-<!--
-### Plugin Selection
-
-… additional plugin functionality is not required for minimal operation. For additional information on plugins and their capabilities see the relevant [plugin](./plugins.md) documentation.
--->
-
-### REST API Authentication
-
-… is by default handled through MultiFactorAuthentication (MFA). _Fathomable.io_ uses [Authenticator](https://www.npmjs.com/package/authenticator-cli) to handle tokens. Any MFA client can be used for token management.
-
-## Installing on Kubernetes
-
-… similar approaches are used for alternative backends. All relevant deployment files are available on this website, just select the versiof the backend used and apply the correct file using the appropriate backend tool.
-
-For _Kubernetes_ v1.8.x execute the following lines.
-
-```
-kubectl apply -f https://www.fathomable.io/deploy/kubernetes/1.8.x/fathomable.yaml
-```
-
-_Fathomable.io_ has now been installed in _kube-system_ with the necessary RBAC permissions. The default MFA token is `amqk ef5z fvrn gp6q p7dg pq6g pncu ww7l`
-
-After the _Fathomable.io_ container downloads it will take up to 90 seconds for _Fathomable.io_ to be able to operate after initial install. This is due to _Fathomable.io_'s database being synced against the _ConfigMap_ object which in most clusters refreshes every 60 seconds. _Fathomable.io_ will enter the _ready_ state when the database has been successfully verified against the _ConfigMap_
-
 ## Usage: Application Tracking
 
 … structurally varies depending on the _Fathomable.io_ user. For the sake of minimalizm starting with the _Application Developer_ is best
