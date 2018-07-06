@@ -85,10 +85,6 @@ example:
 
 … structural copy of [Service / Application / Component Environment](./index.md#environment)
 
-### resource
-
-… structural copy of [Service / Application / Component Resource](./index.md#resource)
-
 ### operatingEnvironment
 
 ```
@@ -103,3 +99,8 @@ dev:
 - ['HALIKE'] @ **ha**
 - ['PRODLIKE'] @ **prod**
 - ['HALIKE', 'PRODLIKE'] @ **perf**
+
+### resource
+
+… structural copy of [Service / Application / Component Resource](./index.md#resource)
+

@@ -27,7 +27,6 @@ pages:
   - 'Essentials': 'index.md'
   - 'Usage: Developer': 'usage-developer.md'
   - 'Usage: Govenor': 'usage-govenor.md'
-  - 'Installing': 'installing.md'
   - 'Configuration':
     - 'Service': 'configuration/index.md'
     - 'Application': 'configuration/index.md'
