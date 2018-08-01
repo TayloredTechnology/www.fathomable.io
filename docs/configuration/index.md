@@ -101,7 +101,7 @@ exampleGroup:
 		availability:
 			gracePeriod:
 				boot: 1
-				stability: 1
+				stability: 0
 				termination: 5
 			minimum: 1
 			maximum: 2
@@ -131,6 +131,16 @@ exampleGroup:
 	- `timeout`: this option is not nested under each probe as failures are being monitored for, its expected that timeout values should apply to all check related endpoints equally.
 - `scalingEvent`: is a passthrough object of trigger events to integrate with orchestration support in triggering scaling up and down of the replicas.
 
+**Note:** With respect to deployment timeouts, **Fathomable.io**'s standard approach is to stall deployments as failed if the Service / Application / Component takes fails to enter `ready` state using one of the following timelines in order of priority rounded to the nearest second:
+
+1. **probe.ready** specified: `(gracePeriod.boot + gracePeriod.stability + (probe.ready.interval * 2)) * 3.3`
+2. **probe.health** specified: `(gracePeriod.boot + gracePeriod.stability + probe.health.interval) * 3.3`
+3. **gracePeriod.stability**: `(gracePeriod.boot + gracePeriod.stability + 10) * 3.3`
+4. **gracePeriod.boot**: `(gracePeriod.boot + 10) * 3.3`
+5. **default settings**: `33` seconds
+
+As seen above 10% buffer is applied to times to ensure container schedulling / restarting via the orchestrator doesn't introduce false-positives
+
 ### circuitBreaker
 
 _available to closed beta customers_
@@ -142,13 +152,13 @@ exampleGroup:
 	exampleApp:
 		commandLineInterface:
 			argument: []
-			command: []
+			command: ''
 ```
 
 … is an override path for container start commands. While most startups will embed the start command and respective arguments in the container image itself, efficient governance exposes all configuration, execution and dependency information. As such the organisation can choose to embed startup information in the container or expose via governance layer.
 
 - `argument`: standard cli arguments for execution. e.g. ['--list', '--debug']
-- `command`: root command to execute when starting the container. e.g. ['/usr/local/bin/command', '--list', 'everywhere']
+- `command`: root command to execute when starting the container. e.g. '/usr/local/bin/command' should this not be specified then the default command the container was built with will be executed.
 
 ### component
 
@@ -184,8 +194,8 @@ exampleGroup:
 
 … are created for every Service / Application / Component by default and register DNS via the following schema: `component-appName.groupName.deploymentTarget.domain`
 
-- `port`: open port for inbound interaction
-- `provide`: **important** for correct dependency management the `provide` endpoints are the registration points for Service / Application / Component searching in generating the deployment graph
+- `port`: open port for inbound interaction.
+- `provide`: **important** for correct dependency management the `provide` endpoints are the registration points for Service / Application / Component searching in generating the deployment graph.
 - `scheme`: extensible against the scheme definitions in RFC standards, the key types are _http_ and _https_ where specifying https will cause auto-creation of SSL certificates at the cluster ingress point.
 
 **Exploring the complex root keys:**
@@ -201,9 +211,9 @@ The `domain` object is structured as follows:
 
 ```
 require:
-	- 'redux.exampleGroup:443/api/v1/ending': ['incoming']
-	- 'exampleApp.exampleGroup:80/v1/': ['incoming', 'outgoing']
-	- '162.0.5.2:8080/': ['outgoing']
+  - 'redux.exampleGroup:443/api/v1/ending': ['incoming']
+  - 'exampleApp.exampleGroup:80/v1/': ['incoming', 'outgoing']
+  - '162.0.5.2:8080/': ['outgoing']
 ```
 The `require` object is quite important. It identifies all dependencies this Service / Application / Component has and helps contribute to the deployment order when creating a _deploymentTarget_. In the event a `require` is not registered with **Fathomable.io** it will be considered external to the cluster and **assumed** to already exist.
 
@@ -236,8 +246,8 @@ files:
 			data:
 				- name: configDetail
 					value: 'string of information'
-		'delta':
-			inheritGroup: false
+    'delta':
+      inheritGroup: false
 ```
 
 Each item in `config` is a representation of a _ConfigMap_ with individual items specified in the array object under `data`. Each item represents an individual file. `mountPath` is the directory location in the container that the _ConfigMap_ should be mounted to.
@@ -410,22 +420,22 @@ exampleGroup:
 exampleGroup:
 	exampleApp
 		stateful:
+			cloudNative: false
 			databaseName: ''
-			individualServices: true	# default = false
-			noCompact: true						# default = false
-			replicas: 3
-			sharedStorage: true				# default = false
-			volumes:
+			individualServices: false
+			replica: 3
+			sharedStorage: false
+			volume:
 				'avolume':
 					mountPath: '/avolume'
 					size: '10Gi'
 					storageClass: ''
 ```
 
+- `cloudNative`: Enables the ability to deploy stateful applications in parallel and will automatically compact number of replicas down in envionments that aren't 'HALIKE' or 'PRODLIKE' to save resources.
 - `databaseName`: standard application naming will be applied if this field is omitted. Its frequently used in custom templates for configuring some of the expected internals
 - `individualServices`: some applications can operate under a common service endpoint, others such as MongoDB require fixed service endpoints for each database
-- `replicas`: number of PODS that should be deployed, if the backend supports it anti-affinity rules will already be in place per Availablility Zone and Host.
-- `noCompact`: in envionments that aren't 'HALIKE' or 'PRODLIKE' **Fathomable.io** will auto-compact to save resources, typically this isn't a problem, however in Stateful dependent applications depending on their requirements they may be configured for n+1 guaranteed minimum levels. As such setting this flag to false will ensure `replicas` number is respected for all environment types. Additionally applications that tollerate `canCompact` will be created in parallel while those that cannot will execute sequentially
+- `replica`: number of PODS that should be deployed, if the backend supports it anti-affinity rules will already be in place per Availablility Zone and Host.
 - `sharedStorage`: determines if the PODS should have mount the same storage or have unique storage per pod (**warhing** multi-mount storage is unsupported by most storage drivers)
 - `storageClass`: the type of storage strategy that should be applied
 
