@@ -1,80 +1,126 @@
 {
-  "name": "www.fathomable.io",
-  "description": "",
-  "homepage": "https://github.com/TayloredTechnology/www.fathomable.io#readme",
-  "version": "0.0.0",
-  "main": "index.js",
-  "author": {
-    "name": "Taylored Technology",
-    "url": "https://tayloredtechnology.net"
-  },
-  "repository": {
-    "email": "TayloredTechnology@protonmail.ch",
-    "type": "git",
-    "url": "git+https://github.com/TayloredTechnology/www.fathomable.io.git"
-  },
-  "bugs": {
-    "url": "https://github.com/TayloredTechnology/www.fathomable.io/issues"
-  },
-  "keywords": [],
-  "dependencies": {},
-  "devDependencies": {
-    "@commitlint/cli": "^6.1.3",
-    "@commitlint/config-conventional": "^6.1.3",
-    "@commitlint/lint": "^6.1.3",
-    "@commitlint/prompt-cli": "^6.1.3",
-    "husky": "^0.15.0-rc.13",
-    "lint-staged": "^7.0.2",
-    "prettier": "^1.11.1"
-  },
-  "engines": {
-    "node": ">=6"
-  },
-  "files": [
-    "index.js"
-  ],
-  "scripts": {
-    "codecov:check": "nyc check-coverage --branches=50 --functions=50 --lines=90 --statements=50",
-    "codecov:generate": "nyc report --reporter=text-lcov > coverage.lcov",
-    "codecov:report": "nyc report --reporter=text",
-    "codecov:upload": "codecov -t ",
-    "commit": "commit",
-    "format": "redrun -p format:*",
-    "format:prettier": "prettier --write '**/*.{css,md}'",
-    "posttest": "redrun -p codecov:report codecov:check",
-    "posttest:ci": "redrun -p codecov:*",
-    "prestart:production": "tape '{,!(node_modules)/**/}*.?(sanity|api).js' | tap-dot",
-    "test": "per-env",
-    "test:api": "nyc --cache --per-file --silent tape '{,!(node_modules)/**/}*.?(api).js' | tap-dot",
-    "test:ci": "nyc --cache --per-file --silent tape '{,!(node_modules)/**/}*.?(spec|sanity|api).js' | tap-dot",
-    "test:development": "nyc --cache --per-file --silent tape '{,!(node_modules)/**/}*.?(spec|sanity).js' | tap-dot",
-    "test:sanity": "nyc --cache --per-file --silent tape '{,!(node_modules)/**/}*.?(sanity).js' | tap-dot"
-  },
-  "license": "SEE LICENSE IN LICENSE",
-  "commitlint": {
-    "extends": [
-      "@commitlint/config-conventional"
-    ]
-  },
-  "husky": {
-    "hooks": {
-      "commit-msg": "commitlint -e $GIT_PARAMS",
-      "pre-commit": "lint-staged"
-    }
-  },
-  "lint-staged": {
-    "linters": {
-      "*.{js}": "xo",
-      "*.{css,md}": [
-        "prettier --write",
-        "git add"
-      ],
-      "*.{spec,sanity,api}.js": [
-        "nyc --per-file --check-coverage --branches=50 --functions=50 --lines=90 --statements=50 tape"
-      ]
-    },
-    "ignore": [
-      "CHANGELOG.md"
-    ]
-  }
+	"name": "www.fathomable.io",
+	"homepage": "https://github.com/TayloredTechnology/www.fathomable.io#readme",
+	"version": "0.0.0",
+	"description": "Governance by Policy",
+	"productName": "Fathomable",
+	"cordovaId": "org.cordova.quasar.app",
+	"author": {
+		"name": "Taylored Technology",
+		"url": "https://tayloredtechnology.net"
+	},
+	"private": true,
+	"repository": {
+		"email": "TayloredTechnology@protonmail.ch",
+		"type": "git",
+		"url": "git+https://github.com/TayloredTechnology/www.fathomable.io.git"
+	},
+	"bugs": {
+		"url": "https://github.com/TayloredTechnology/www.fathomable.io/issues"
+	},
+	"keywords": [],
+	"dependencies": {
+		"axios": "^0.18.0",
+		"fastify": "^1.9.0",
+		"fastify-caching": "^3.0.0",
+		"fastify-compress": "^0.6.0",
+		"fastify-static": "^0.12.0",
+		"fastify-vue": "^1.1.0",
+		"iltorb": "^2.4.0",
+		"make-promises-safe": "^1.1.0",
+		"serve-static": "^1.13.2",
+		"upath": "^1.1.0"
+	},
+	"devDependencies": {
+		"@commitlint/cli": "^6.1.3",
+		"@commitlint/config-conventional": "^6.1.3",
+		"@commitlint/lint": "^6.1.3",
+		"@commitlint/prompt-cli": "^6.1.3",
+		"babel-eslint": "^8.2.6",
+		"eslint": "^5.2.0",
+		"eslint-plugin-vue": "^4.7.1",
+		"husky": "^0.15.0-rc.13",
+		"lint-staged": "^7.0.2",
+		"prettier": "^1.11.1",
+		"quasar-cli": "^0.17.0",
+		"strip-ansi": "=3.0.1",
+		"xo": "^0.21.1"
+	},
+	"engines": {
+		"node": ">= 8.9.0",
+		"npm": ">= 5.6.0",
+		"yarn": ">= 1.6.0"
+	},
+	"browserslist": [
+		"> 1%",
+		"last 2 versions",
+		"not ie <= 10"
+	],
+	"scripts": {
+		"codecov:check": "nyc check-coverage --branches=50 --functions=50 --lines=90 --statements=50",
+		"codecov:generate": "nyc report --reporter=text-lcov > coverage.lcov",
+		"codecov:report": "nyc report --reporter=text",
+		"codecov:upload": "codecov -t ",
+		"commit": "commit",
+		"format": "redrun -p format:*",
+		"format:prettier": "prettier --write '**/*.{css,md}'",
+		"posttest": "redrun -p codecov:report codecov:check",
+		"posttest:ci": "redrun -p codecov:*",
+		"prestart:production": "tape '{,!(node_modules)/**/}*.?(sanity|api).js' | tap-dot",
+		"test": "per-env",
+		"test:api": "nyc --cache --per-file --silent tape '{,!(node_modules)/**/}*.?(api).js' | tap-dot",
+		"test:ci": "nyc --cache --per-file --silent tape '{,!(node_modules)/**/}*.?(spec|sanity|api).js' | tap-dot",
+		"test:development": "nyc --cache --per-file --silent tape '{,!(node_modules)/**/}*.?(spec|sanity).js' | tap-dot",
+		"test:sanity": "nyc --cache --per-file --silent tape '{,!(node_modules)/**/}*.?(sanity).js' | tap-dot"
+	},
+	"license": "SEE LICENSE IN LICENSE",
+	"commitlint": {
+		"extends": [
+			"@commitlint/config-conventional"
+		]
+	},
+	"husky": {
+		"hooks": {
+			"commit-msg": "commitlint -e $GIT_PARAMS",
+			"pre-commit": "lint-staged"
+		}
+	},
+	"lint-staged": {
+		"linters": {
+			"*.{js}": "xo",
+			"*.{css,md}": [
+				"prettier --write",
+				"git add"
+			],
+			"*.{spec,sanity,api}.js": [
+				"nyc --per-file --check-coverage --branches=50 --functions=50 --lines=90 --statements=50 tape"
+			]
+		},
+		"ignore": [
+			"CHANGELOG.md"
+		]
+	},
+	"xo": {
+		"extends": [
+			"plugin:vue/base"
+		],
+		"prettier": true,
+		"settings": {
+			"import/core-modules": [
+				"vue"
+			]
+		},
+		"overrides": [
+			{
+				"files": [
+					"src/**/*"
+				],
+				"parserOptions": {
+					"parser": "babel-eslint",
+					"ecmaVersion": 2017,
+					"sourceType": "module"
+				}
+			}
+		]
+	}
 }
