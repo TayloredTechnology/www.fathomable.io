@@ -21,30 +21,40 @@
 	"keywords": [],
 	"dependencies": {
 		"axios": "^0.18.0",
+		"cloudinary": "^1.11.0",
+		"fast-glob": "^2.2.2",
 		"fastify": "^1.9.0",
 		"fastify-caching": "^3.0.0",
 		"fastify-compress": "^0.6.0",
 		"fastify-static": "^0.12.0",
 		"fastify-vue": "^1.1.0",
+		"gray-matter": "^4.0.1",
 		"iltorb": "^2.4.0",
+		"lodash": "^4.17.10",
 		"make-promises-safe": "^1.1.0",
+		"markdown-it": "^8.4.2",
+		"pluralize": "^7.0.0",
 		"serve-static": "^1.13.2",
-		"upath": "^1.1.0"
+		"upath": "^1.1.0",
+		"vue-d2b": "^1.0.14",
+		"vue-link": "^1.3.0",
+		"vuex-dry": "^0.1.19",
+		"vuex-router-sync": "^5.0.0"
 	},
 	"devDependencies": {
-		"@commitlint/cli": "^6.1.3",
-		"@commitlint/config-conventional": "^6.1.3",
-		"@commitlint/lint": "^6.1.3",
-		"@commitlint/prompt-cli": "^6.1.3",
+		"@commitlint/cli": "^7.0.0",
+		"@commitlint/config-conventional": "^7.0.1",
+		"@commitlint/lint": "^7.0.0",
+		"@commitlint/prompt-cli": "^7.0.0",
 		"babel-eslint": "^8.2.6",
-		"eslint": "^5.2.0",
+		"eslint": "^5.3.0",
 		"eslint-plugin-vue": "^4.7.1",
-		"husky": "^0.15.0-rc.13",
+		"husky": "^1.0.0-rc.13",
 		"lint-staged": "^7.0.2",
-		"prettier": "^1.11.1",
-		"quasar-cli": "^0.17.0",
-		"strip-ansi": "=3.0.1",
-		"xo": "^0.21.1"
+		"prettier": "^1.14.2",
+		"quasar-cli": "^0.17.9",
+		"strip-ansi": "^3.0.1",
+		"xo": "^0.22.0"
 	},
 	"engines": {
 		"node": ">= 8.9.0",
@@ -102,7 +112,7 @@
 	},
 	"xo": {
 		"extends": [
-			"plugin:vue/base"
+			"plugin:vue/recommended"
 		],
 		"prettier": true,
 		"settings": {
@@ -113,11 +123,11 @@
 		"overrides": [
 			{
 				"files": [
-					"src/**/*"
+					"src/**/*.vue"
 				],
 				"parserOptions": {
 					"parser": "babel-eslint",
-					"ecmaVersion": 2017,
+					"ecmaVersion": 2018,
 					"sourceType": "module"
 				}
 			}

@@ -1,8 +1,21 @@
 const routes = [
 	{
 		path: '/',
-		component: () => import('layouts/MyLayout.vue'),
+		component: () => import('layouts/content.vue'),
 		children: [{path: '', component: () => import('pages/Index.vue')}]
+	},
+	{
+		path: '/docs',
+		component: () => import('layouts/content.vue'),
+		children: [
+			{
+				path: '',
+				component: () => import('pages/markdown.vue'),
+				metadata: {index: true}
+			},
+			{path: ':category', component: () => import('pages/markdown.vue')},
+			{path: ':category/:post', component: () => import('pages/markdown.vue')}
+		]
 	}
 ]
 

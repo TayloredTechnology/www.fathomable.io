@@ -33,6 +33,9 @@ app.register(require('fastify-compress'), {
 if (ssr.settings.pwa) {
 	app.use('/service-worker.js', serve('service-worker.js'))
 }
+// TODO scan and load the markdown files into a json structure for indexing and syncing to store rapidly
+// https://github.com/lmaccherone/node-localstorage
+// https://www.npmjs.com/package/vue-warehouse
 
 // serve "www" folder
 // TODO upgrade to fastify-static
