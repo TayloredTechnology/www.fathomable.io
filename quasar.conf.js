@@ -6,7 +6,7 @@ module.exports = function(ctx) {
 		plugins: [
 			'axios',
 			{path: 'markdown', client: false},
-			{path: 'vuex-router-sync', server: false}
+			{path: 'npm-client-imports', server: false}
 		],
 		css: ['app.styl'],
 		extras: [
@@ -25,7 +25,8 @@ module.exports = function(ctx) {
 			// analyze: true,
 			// extractCSS: false,
 			extendWebpack(cfg) {},
-			chainWebpack(chain) {}
+			chainWebpack(chain) {},
+			transpileDependencies: []
 		},
 		devServer: {
 			// https: true,
@@ -53,6 +54,7 @@ module.exports = function(ctx) {
 				'QItemMain',
 				'QItemSide',
 				'QParallax',
+				'QTree',
 				'QVideo'
 			],
 			directives: ['Ripple'],

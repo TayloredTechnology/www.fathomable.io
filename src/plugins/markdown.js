@@ -5,6 +5,12 @@ import path from 'upath'
 import glob from 'fast-glob'
 //import axios from 'axios'
 import _ from 'lodash'
+//import sections from 'sections'
+// TODO Table of Contents & Conversion from Markdown-it to Remark
+// Remark has a much better integration approach with VUE / Quasar than Markdown-it would have
+// Alternatively should TOC be critical, it can be monkey patched in with 'sections'
+//import remark from 'remark'
+//import toc from 'mdast-util-toc'
 
 const subPath = process.env.NODE_ENV === 'production' ? 'www/' : 'src/'
 
@@ -28,6 +34,27 @@ export default ({app, store, router, Vue, ssrContext}) => {
 			const category = toSort.shift()
 			const data = matter.read('./' + doc)
 			data.slug = toSort.shift().replace('.md', '')
+
+			/*
+			const sectionDataRaw = sections.parse(data.content)
+			const toc = []
+
+			let treeOps = []
+			let treeLevel = 1
+			let parent = 0
+			for (const item in sectionDataRaw.sections) {
+				if (item.level > treeLevel) {
+					treeLevel++
+					parent = item.count - 1
+				} else {
+					if (item.level < treeLevel) {
+						treeLevel--
+						parent = 'bleh'
+					}
+				}
+				_.pick(item, ['level', 'title', 'count'])
+      }
+      */
 			delete data.orig
 			const storeLocation = [area, category].join('~')
 			if (_.has(storeUpdater, storeLocation)) {

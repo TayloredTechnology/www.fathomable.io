@@ -1,6 +1,13 @@
 <template>
   <q-page padding>
-    <div v-html="rawHTML"></div>
+
+    <vue-link
+      :to="`/feed.xml`"
+      :external="true">
+      Awesome Linky
+    </vue-link>
+
+    <div v-html="rawHTML"/>
   </q-page>
 </template>
 
@@ -25,6 +32,19 @@ export default {
 		},
 		rawHTML() {
 			return md.render(this.postCache.content)
+		},
+		postLookupPath() {
+			const drillDown = ['category']
+			let routeAppend = []
+			for (const item of drillDown) {
+				if (_.has(this.$route.params, item))
+					routeAppend.push(_.get(this.$route.params, item))
+			}
+			return (
+				'md/' +
+				[this.$route.path.split('/')[1], routeAppend].join('~') +
+				'$find'
+			)
 		}
 	},
 
@@ -40,7 +60,10 @@ export default {
 
 	methods: {
 		postData(post) {
-			return this.$store.getters['md/docs~usage$find']('slug', post)
+			let retData = this.$store.getters[this.postLookupPath]('slug', post)
+			if (!retData)
+				retData = this.$store.getters[this.postLookupPath]('slug', 'index')
+			return retData
 		},
 		renderMD(content) {
 			return md.render(content)
@@ -66,9 +89,16 @@ export default {
 			redirect(slugWords.join('-'))
 		}
 
-		const postData = store.getters[
+		const getPostPath =
 			'md/' + [currentRoute.path.split('/')[1], routeAppend].join('~') + '$find'
-		]('slug', currentRoute.params.post)
+		let postData = store.getters[getPostPath]('slug', currentRoute.params.post)
+
+		// Check if the '/index' file is available
+
+		if (!postData) {
+			postData = store.getters[getPostPath]('slug', 'index')
+		}
+
 		//TODO make 404 link
 		if (!postData) redirect('/')
 	}
